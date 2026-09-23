@@ -1,0 +1,182 @@
+{
+  "name": "MAS_Samidha_n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -304,
+        -224
+      ],
+      "id": "0d26f45c-bf70-45ba-a4ed-3a8563d9d930",
+      "name": "When chat message received",
+      "webhookId": "1f78f891-f59b-4132-9c47-a95699923c68"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a information collection agent, collect all the relevant information from web search, in comprehensive way. Try to find maximum possible information about user question. You should focus on major keywords to collect large set of information from web."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -112,
+        -224
+      ],
+      "id": "7e5f61d2-9774-4365-8c05-1342167b4a70",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "query": "who is leo messi?",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        224,
+        48
+      ],
+      "id": "ddfdbe6f-17d9-40b3-aa12-214ac828aba6",
+      "name": "Search in Tavily",
+      "credentials": {
+        "tavilyApi": {
+          "id": "ym4iEVHTj7J0jnFu",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        80
+      ],
+      "id": "8a15b527-39c2-487d-8733-a17923e7509f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        112
+      ],
+      "id": "945754c4-af0e-4add-9d7d-86e51c91c823",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "91jz4FML4ftT8g9q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are the final level agent give the output on user query. You can generate sentiment result, summary, comprehensive result to support user question. To generate results or summary conclusion you n use output to connected output of connected agent",
+        "options": {
+          "systemMessage": "You are the final level agent give the output on user query. You can generate sentiment result, summary, comprehensive result to support user question. To generate results or summary conclusion you n use output to connected output of connected agent"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        192,
+        -224
+      ],
+      "id": "31685ab1-56c6-41ec-9827-3b66a3a0d67a",
+      "name": "AI Agent1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search in Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "bc5e94a3-00f0-4163-8ada-6123e32b1520",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07aeade39f81f6b1d05410e1a19b96bd16c3970b6cc9e3ec869a1c54bc41df0a"
+  },
+  "nodeGroups": [],
+  "id": "oQy5B3WYGoGZ8HjY",
+  "tags": []
+}
